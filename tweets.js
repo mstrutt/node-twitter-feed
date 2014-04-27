@@ -14,9 +14,9 @@ function tweetText (tweet) {
 }
 
 function getAge (file) {
-	var stat = fs.statSync('tweets.json'),
+	var stat = fs.statSync(config.filename),
 		now = new Date().getTime(),
-		lastMod = new Date(stat.ctime).getTime();
+		lastMod = new Date(stat.mtime).getTime();
 		age = Math.round((now - lastMod) / 1000);
 	console.log(age + 's since last update');
 	return age;
@@ -30,10 +30,10 @@ function fourOhFour (request, response) {
 
 http.createServer(function (request, response) {
 	console.log(request.url);
-	if (request.url.indexOf('tweets.json') === -1) {
+	if (request.url.indexOf(config.filename) === -1) {
 		fourOhFour(request, response);
 	} else {
-		if (getAge('tweets.json') > 60) {
+		if (getAge(config.filename) > 300) {
 			twitter.get('statuses/user_timeline', {
 				screen_name: config.handle,
 				trim_user: true,
@@ -42,8 +42,8 @@ http.createServer(function (request, response) {
 				if (err)
 					console.log(err);
 				else {
-					tweets = JSON.stringify(tweets.map(tweetText));
-					fs.writeFile('tweets.json', tweets);
+					tweets = JSON.stringify(tweets.slice(0, config.count).map(tweetText));
+					fs.writeFile(config.filename, tweets);
 					console.log('Tweets saved to cache');
 					response.end(tweets);
 					console.log('Serving up-to-date tweets');
@@ -51,7 +51,7 @@ http.createServer(function (request, response) {
 			});
 		} else {
 			console.log('Serving tweets from cache');
-			fs.readFile('tweets.json', function(err, tweets){
+			fs.readFile(config.filename, function(err, tweets){
 				if (err)
 					console.log(err);
 				else
@@ -59,4 +59,6 @@ http.createServer(function (request, response) {
 			});		
 		}
 	}
-}).listen('8080', '0.0.0.0');
+}).listen(config.port, config.ip);
+
+console.log('Twitter server started at http://'+config.ip+':'+config.port);
