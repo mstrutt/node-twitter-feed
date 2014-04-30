@@ -75,7 +75,8 @@ http.createServer(function (request, response) {
 	if (request.url.indexOf(config.filename) === -1) {
 		fourOhFour(request, response);
 	} else {
-		response.setHeader('Access-Control-Allow-Origin', 'http://mstrutt.dev');
+		if (config.origin.indexOf(request.headers.origin) > -1)
+			response.setHeader('Access-Control-Allow-Origin', request.headers.origin);
 		respondWithTweets(request, response);
 	}
 }).listen(config.port, config.ip);
