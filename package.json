@@ -1,0 +1,31 @@
+{
+  "name": "node-twitter-feed",
+  "version": "0.0.1",
+  "description": "Simple json response of a twitter timeline, caching the result for improved performance",
+  "main": "tweets.js",
+  "dependencies": {
+    "mtwitter": "~1.5.3",
+    "prompt": "~0.2.12"
+  },
+  "devDependencies": {
+    "mtwitter": "~1.5.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mstrutt/node-twitter-feed.git"
+  },
+  "keywords": [
+    "nodejs",
+    "twitter"
+  ],
+  "author": "Michael Strutt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mstrutt/node-twitter-feed/issues"
+  },
+  "homepage": "https://github.com/mstrutt/node-twitter-feed"
+}
